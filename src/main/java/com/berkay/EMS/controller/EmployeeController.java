@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -52,6 +54,19 @@ public class EmployeeController {
 
         return ResponseEntity.ok(updatedEmployee);
 
+    }
+
+    @DeleteMapping("employees/{id}")
+    public ResponseEntity<Map<String , Boolean>> deleteEmployee(@PathVariable Long id){
+
+        Employee deletedEmployee =  employeeRepository.findById(id)
+                .orElseThrow( () -> new ResourceNotFoundException("Employee not found with id: " + id));
+
+        employeeRepository.delete(deletedEmployee);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("Deleted", Boolean.TRUE);
+
+        return ResponseEntity.ok(response);
     }
 
 }
