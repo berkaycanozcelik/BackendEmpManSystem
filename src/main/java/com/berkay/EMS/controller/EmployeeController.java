@@ -16,8 +16,11 @@ import java.util.Optional;
 @RequestMapping("api/v1/")
 public class EmployeeController {
 
-    @Autowired
     private EmployeeRepository employeeRepository;
+    @Autowired
+    public EmployeeController(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
 
     //get all employees
     @GetMapping("/employees")
