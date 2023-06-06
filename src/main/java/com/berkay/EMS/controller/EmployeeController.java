@@ -5,6 +5,7 @@ import com.berkay.EMS.model.Employee;
 import com.berkay.EMS.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -16,7 +17,7 @@ import java.util.Optional;
 @RequestMapping("api/v1/")
 public class EmployeeController {
 
-    private EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
     @Autowired
     public EmployeeController(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
@@ -30,6 +31,7 @@ public class EmployeeController {
 
     //create employee
     @PostMapping("employee")
+    @Transactional
     public Employee createEmployee(@RequestBody Employee employee){
         return employeeRepository.save(employee);
     }
@@ -45,6 +47,7 @@ public class EmployeeController {
 
     //update Employee
     @PutMapping("employees/{id}")
+    @Transactional
     public ResponseEntity<Employee> updateEmployee(@PathVariable Long id,@RequestBody Employee employeeDetail){
         Employee employee =  employeeRepository.findById(id)
                 .orElseThrow( () -> new ResourceNotFoundException("Employee not found with id: " + id));
@@ -60,6 +63,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("employees/{id}")
+    @Transactional
     public ResponseEntity<Map<String , Boolean>> deleteEmployee(@PathVariable Long id){
 
         Employee deletedEmployee =  employeeRepository.findById(id)
